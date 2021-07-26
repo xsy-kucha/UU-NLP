@@ -6,6 +6,10 @@
 
 3、用git来获取代码。
 
+   !git config --global user.name 'xsy-kucha'
+   
+   !git config --global user.email '2279038930@qq.com'
+
    !git clone https://github.com/xsy-kucha/UU-NLP.git
    
 4、在run.sh中将路径设置完毕
