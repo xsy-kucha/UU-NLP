@@ -26,7 +26,6 @@ import optimization
 import tokenization
 import tensorflow as tf
 import pandas as pd
-
 flags = tf.flags
 
 FLAGS = flags.FLAGS
@@ -70,7 +69,7 @@ flags.DEFINE_integer(
 
 flags.DEFINE_bool("do_train", False, "Whether to run training.")
 
-flags.DEFINE_bool("do_eval", True, "Whether to run eval on the dev set.")
+flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
 
 flags.DEFINE_bool(
     "do_predict", False,
@@ -293,53 +292,6 @@ class MnliProcessor(DataProcessor):
           InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
     return examples
 
-class SimProcessor(DataProcessor):
-    def get_train_examples(self, data_dir):
-        file_path = os.path.join(data_dir, 'train.csv')
-        train_df = pd.read_csv(file_path, encoding='gb18030')
-        train_data = []
-        for index, train in enumerate(train_df.values):
-            guid = 'train-%d' % index
-            text_a = tokenization.convert_to_unicode(str(train[0]))
-            text_b = tokenization.convert_to_unicode(str(train[1]))
-            label = str(train[2])
-            train_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
-        return train_data
-    def get_dev_examples(self, data_dir):
-        file_path = os.path.join(data_dir, 'dev.csv')
-        dev_df = pd.read_csv(file_path, encoding='gb18030')
-        dev_data = []
-        for index, dev in enumerate(dev_df.values):
-            guid = 'test-%d' % index
-            text_a = tokenization.convert_to_unicode(str(dev[0]))
-            text_b = tokenization.convert_to_unicode(str(dev[1]))
-            label = str(dev[2])
-            dev_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
-        return dev_data
-
-    def get_test_examples(self, data_dir):
-        file_path = os.path.join(data_dir, 'test.csv')
-        test_df = pd.read_csv(file_path, encoding='gb18030')
-        test_data = []
-        for index, test in enumerate(test_df.values):
-            guid = 'test-%d' % index
-            text_a = tokenization.convert_to_unicode(str(test[0]))
-            text_b = tokenization.convert_to_unicode(str(test[1]))
-            label = str(test[2])
-            test_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
-        return test_data
-
-    def get_sentence_examples(self, questions):
-        for index, data in enumerate(questions):
-            guid = 'test-%d' % index
-            text_a = tokenization.convert_to_unicode(str(data[0]))
-            text_b = tokenization.convert_to_unicode(str(data[1]))
-            label = str(0)
-            yield InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label)
-
-    def get_labels(self):
-        return ['0', '1']
-
 
 class MrpcProcessor(DataProcessor):
   """Processor for the MRPC data set (GLUE version)."""
@@ -421,6 +373,52 @@ class ColaProcessor(DataProcessor):
           InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
     return examples
 
+class SimProcessor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        file_path = os.path.join(data_dir, 'train.csv')
+        train_df = pd.read_csv(file_path, encoding='utf-8')
+        train_data = []
+        for index, train in enumerate(train_df.values):
+            guid = 'train-%d' % index
+            text_a = tokenization.convert_to_unicode(str(train[0]))
+            text_b = tokenization.convert_to_unicode(str(train[1]))
+            label = str(train[2])
+            train_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+        return train_data
+    def get_dev_examples(self, data_dir):
+        file_path = os.path.join(data_dir, 'dev.csv')
+        dev_df = pd.read_csv(file_path, encoding='gb18030')
+        dev_data = []
+        for index, dev in enumerate(dev_df.values):
+            guid = 'test-%d' % index
+            text_a = tokenization.convert_to_unicode(str(dev[0]))
+            text_b = tokenization.convert_to_unicode(str(dev[1]))
+            label = str(dev[2])
+            dev_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+        return dev_data
+
+    def get_test_examples(self, data_dir):
+        file_path = os.path.join(data_dir, 'test.csv')
+        test_df = pd.read_csv(file_path, encoding='gb18030')
+        test_data = []
+        for index, test in enumerate(test_df.values):
+            guid = 'test-%d' % index
+            text_a = tokenization.convert_to_unicode(str(test[0]))
+            text_b = tokenization.convert_to_unicode(str(test[1]))
+            label = str(test[2])
+            test_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+        return test_data
+
+    def get_sentence_examples(self, questions):
+        for index, data in enumerate(questions):
+            guid = 'test-%d' % index
+            text_a = tokenization.convert_to_unicode(str(data[0]))
+            text_b = tokenization.convert_to_unicode(str(data[1]))
+            label = str(0)
+            yield InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label)
+
+    def get_labels(self):
+        return ['0', '1']
 
 def convert_single_example(ex_index, example, label_list, max_seq_length,
                            tokenizer):
