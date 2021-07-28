@@ -12,7 +12,9 @@ loss = 0.7437464
 
 对于tsv文件，需要将run_classfier.py文件中的SimProcessor类换为：
 
-class SimProcessor(DataProcessor):
+
+    class SimProcessor(DataProcessor):
+
     def get_train_examples(self, data_dir):
         file_path = os.path.join(data_dir, 'train.tsv')
         train_df = pd.read_csv(file_path, encoding='utf-8', sep='\t')
@@ -24,6 +26,7 @@ class SimProcessor(DataProcessor):
             label = str(train[2])
             train_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return train_data
+        
     def get_dev_examples(self, data_dir):
         file_path = os.path.join(data_dir, 'dev.tsv')
         dev_df = pd.read_csv(file_path, encoding='utf-8', sep='\t')
@@ -35,7 +38,7 @@ class SimProcessor(DataProcessor):
             label = str(dev[2])
             dev_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return dev_data
-
+        
     def get_test_examples(self, data_dir):
         file_path = os.path.join(data_dir, 'test.tsv')
         test_df = pd.read_csv(file_path, encoding='utf-8', sep='\t')
