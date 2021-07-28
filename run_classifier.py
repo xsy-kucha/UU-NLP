@@ -375,8 +375,8 @@ class ColaProcessor(DataProcessor):
 
 class SimProcessor(DataProcessor):
     def get_train_examples(self, data_dir):
-        file_path = os.path.join(data_dir, 'train.csv')
-        train_df = pd.read_csv(file_path, encoding='utf-8')
+        file_path = os.path.join(data_dir, 'train.tsv')
+        train_df = pd.read_csv(file_path, encoding='utf-8', sep='\t')
         train_data = []
         for index, train in enumerate(train_df.values):
             guid = 'train-%d' % index
@@ -386,8 +386,8 @@ class SimProcessor(DataProcessor):
             train_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return train_data
     def get_dev_examples(self, data_dir):
-        file_path = os.path.join(data_dir, 'dev.csv')
-        dev_df = pd.read_csv(file_path, encoding='gb18030')
+        file_path = os.path.join(data_dir, 'dev.tsv')
+        dev_df = pd.read_csv(file_path, encoding='utf-8', sep='\t')
         dev_data = []
         for index, dev in enumerate(dev_df.values):
             guid = 'test-%d' % index
@@ -398,8 +398,8 @@ class SimProcessor(DataProcessor):
         return dev_data
 
     def get_test_examples(self, data_dir):
-        file_path = os.path.join(data_dir, 'test.csv')
-        test_df = pd.read_csv(file_path, encoding='gb18030')
+        file_path = os.path.join(data_dir, 'test.tsv')
+        test_df = pd.read_csv(file_path, encoding='utf-8', sep='\t')
         test_data = []
         for index, test in enumerate(test_df.values):
             guid = 'test-%d' % index
